@@ -1,0 +1,5 @@
+{
+  "name": "Synagogue Manager",
+  "description": "A comprehensive dashboard for Synagogue administration including member management, charge tracking, and a member-facing debt view.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Synagogue Manager</title>
+    
+    <!-- Google Fonts: Heebo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#1E3A8A', // Deep Royal Blue
+              'primary-dark': '#172554',
+              secondary: '#64748b', // Slate 500
+              gold: '#D97706', // Gold Accent
+              'gold-light': '#FEF3C7',
+              'paper-bg': '#F8FAFC', // Slate 50
+              surface: '#ffffff',
+            },
+            fontFamily: {
+              sans: ['Heebo', 'sans-serif'],
+              mono: ['Heebo', 'sans-serif'], // Replacing mono with Heebo for cleaner look
+            },
+            boxShadow: {
+              'soft': '0 4px 6px -1px rgba(30, 58, 138, 0.1), 0 2px 4px -1px rgba(30, 58, 138, 0.06)',
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      body {
+        background-color: #f1f5f9; /* Slate 100 outside the app */
+        -webkit-font-smoothing: antialiased;
+      }
+      /* Hide scrollbar for clean mobile look */
+      ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "recharts": "https://esm.sh/recharts@^3.6.0",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root" class="flex justify-center min-h-screen py-0 sm:py-8"></div>
+  </body>
+</html>
