@@ -20,12 +20,12 @@ const INITIAL_TRANSACTIONS: Transaction[] = [
 ];
 
 const INITIAL_MEMBERS: Member[] = [
-    { id: '1', name: 'אברהם כהן', status: 'פעיל', family: 'כהן', avatar: 'א', notes: 'צריך יזכור בשבוע הבא' },
-    { id: '2', name: 'יצחק לוי', status: 'פעיל', family: 'לוי', avatar: 'י' },
-    { id: '3', name: 'משה מזרחי', status: 'חבר ועד', family: 'מזרחי', avatar: 'מ' },
-    { id: '4', name: 'דוד שרעבי', status: 'פעיל', family: 'שרעבי', avatar: 'ד' },
+    { id: '1', name: 'אברהם כהן', status: 'פעיל', family: 'כהן', avatar: 'א', notes: 'צריך יזכור בשבוע הבא', seatNumber: 1 },
+    { id: '2', name: 'יצחק לוי', status: 'פעיל', family: 'לוי', avatar: 'י', seatNumber: 5 },
+    { id: '3', name: 'משה מזרחי', status: 'חבר ועד', family: 'מזרחי', avatar: 'מ', seatNumber: 12 },
+    { id: '4', name: 'דוד שרעבי', status: 'פעיל', family: 'שרעבי', avatar: 'ד', seatNumber: 13 },
     { id: '5', name: 'יעקב פרידמן', status: 'אורח', family: 'פרידמן', avatar: 'י' },
-    { id: '6', name: 'יוסף אזולאי', status: 'פעיל', family: 'אזולאי', avatar: 'י' },
+    { id: '6', name: 'יוסף אזולאי', status: 'פעיל', family: 'אזולאי', avatar: 'י', seatNumber: 20 },
     { id: '7', name: 'חיים בוזגלו', status: 'לא פעיל', family: 'בוזגלו', avatar: 'ח' },
 ];
 

@@ -8,6 +8,7 @@ export interface Member {
   status?: string;
   family?: string;
   notes?: string; // New field for Gabbai notes
+  seatNumber?: number; // Seat assignment
 }
 
 export interface Transaction {
