@@ -23,7 +23,7 @@ export const AddMemberForm: React.FC<Props> = ({ onSave, onCancel, existingMembe
     );
 
     if (isDuplicate) {
-        setError(`החבר '${fullName}' כבר קיים במערכת`);
+        setError(`המתפלל '${fullName}' כבר קיים במערכת`);
         setTimeout(() => setError(null), 5000);
     } else if (firstName && lastName) {
         onSave({ name: fullName });
@@ -36,8 +36,8 @@ export const AddMemberForm: React.FC<Props> = ({ onSave, onCancel, existingMembe
   return (
     <div className="flex flex-col h-full bg-paper-bg p-6 relative">
        <div className="mb-8">
-         <h2 className="text-2xl font-bold text-primary">הוספת חבר חדש</h2>
-         <p className="text-sm text-slate-500 mt-1">מלא את הפרטים ליצירת כרטיס חבר</p>
+         <h2 className="text-2xl font-bold text-primary">הוספת מתפלל חדש</h2>
+         <p className="text-sm text-slate-500 mt-1">מלא את הפרטים ליצירת כרטיס מתפלל</p>
        </div>
 
        <form onSubmit={handleSubmit} className="flex-1 space-y-6 relative">
@@ -79,7 +79,7 @@ export const AddMemberForm: React.FC<Props> = ({ onSave, onCancel, existingMembe
                 type="submit"
                 className="w-full bg-primary text-white rounded-xl py-4 font-bold text-lg shadow-lg shadow-blue-900/20 hover:bg-blue-800 transition-all"
              >
-                שמור פרטי חבר
+                שמור פרטי מתפלל
              </button>
              <button 
                 type="button"

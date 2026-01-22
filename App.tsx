@@ -43,18 +43,26 @@ export default function App() {
   const [prayerTimes, setPrayerTimes] = useState<PrayerTimesConfig>(INITIAL_PRAYER_TIMES);
   const [showSuccessBanner, setShowSuccessBanner] = useState(false);
   const [highlightMemberId, setHighlightMemberId] = useState<string | null>(null);
+  const [preSelectedMemberId, setPreSelectedMemberId] = useState<string | null>(null);
 
   const handleNavigate = (view: string) => {
       setCurrentView(view as ViewState);
       // Reset temporary states on nav
       setShowSuccessBanner(false); 
       setHighlightMemberId(null);
+      if (view !== 'add-charge') setPreSelectedMemberId(null);
   }
+
+  const handleNavigateToCharge = (memberId: string) => {
+    setPreSelectedMemberId(memberId);
+    setCurrentView('add-charge');
+  };
 
   const handleAddTransaction = (transaction: Transaction) => {
     setTransactions(prev => [transaction, ...prev]);
     setShowSuccessBanner(true);
     setCurrentView('admin-list');
+    setPreSelectedMemberId(null);
     setTimeout(() => setShowSuccessBanner(false), 5000);
   };
 
@@ -110,7 +118,14 @@ export default function App() {
             />
         );
       case 'add-charge':
-        return <AddChargeFlow onComplete={handleAddTransaction} onCancel={() => setCurrentView('admin-grid')} existingMembers={members} />;
+        return (
+          <AddChargeFlow 
+            onComplete={handleAddTransaction} 
+            onCancel={() => setCurrentView('admin-grid')} 
+            existingMembers={members}
+            initialMemberId={preSelectedMemberId || undefined}
+          />
+        );
       case 'add-member':
         return <AddMemberForm onSave={handleAddMember} onCancel={() => setCurrentView('members')} existingMembers={members} />;
       case 'update-times':
@@ -126,10 +141,11 @@ export default function App() {
                 highlightId={highlightMemberId} 
                 onAddMember={() => setCurrentView('add-member')}
                 onUpdateMember={handleUpdateMember}
+                onChargeMember={handleNavigateToCharge}
             />
         );
       case 'finance':
-        return <FinanceView />;
+        return <FinanceView transactions={transactions} />;
       case 'settings':
         return <SettingsView />;
         
@@ -144,10 +160,10 @@ export default function App() {
           case 'admin-grid': return 'ניהול בית כנסת';
           case 'admin-list': return 'גבייה ונדרים';
           case 'add-charge': return 'חיוב מתפלל';
-          case 'add-member': return 'הוספת חבר';
+          case 'add-member': return 'הוספת מתפלל';
           case 'update-times': return 'עדכון זמנים';
           case 'member-view': return 'ההתראות שלי';
-          case 'members': return 'ספר החברים';
+          case 'members': return 'ספר המתפללים';
           case 'finance': return 'קופה ודוחות';
           case 'settings': return 'הגדרות';
           default: return 'ניהול בית כנסת';

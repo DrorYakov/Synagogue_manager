@@ -21,15 +21,18 @@
               secondary: '#64748b', // Slate 500
               gold: '#D97706', // Gold Accent
               'gold-light': '#FEF3C7',
-              'paper-bg': '#F8FAFC', // Slate 50
+              'paper-bg': '#F1F5F9', // Slightly darker Slate 100 for better shadow contrast
               surface: '#ffffff',
             },
             fontFamily: {
               sans: ['Heebo', 'sans-serif'],
-              mono: ['Heebo', 'sans-serif'], // Replacing mono with Heebo for cleaner look
+              mono: ['Heebo', 'sans-serif'],
             },
             boxShadow: {
-              'soft': '0 4px 6px -1px rgba(30, 58, 138, 0.1), 0 2px 4px -1px rgba(30, 58, 138, 0.06)',
+              'soft': '0 10px 25px -5px rgba(30, 58, 138, 0.08), 0 8px 10px -6px rgba(30, 58, 138, 0.05)',
+              'medium': '0 15px 30px -5px rgba(30, 58, 138, 0.15), 0 10px 15px -5px rgba(30, 58, 138, 0.1)',
+              'intense': '0 25px 50px -12px rgba(30, 58, 138, 0.25)',
+              'fab': '0 12px 24px -6px rgba(30, 58, 138, 0.4), 0 8px 12px -4px rgba(30, 58, 138, 0.2)',
             }
           },
         },
@@ -37,13 +40,17 @@
     </script>
     <style>
       body {
-        background-color: #f1f5f9; /* Slate 100 outside the app */
+        background-color: #e2e8f0; /* Slate 200 outside the app */
         -webkit-font-smoothing: antialiased;
       }
-      /* Hide scrollbar for clean mobile look */
+      /* Hide scrollbar */
       ::-webkit-scrollbar {
         width: 0px;
         background: transparent;
+      }
+      /* Added transition for all shadow changes */
+      .shadow-transition {
+        transition: box-shadow 0.3s ease, transform 0.2s ease;
       }
     </style>
   <script type="importmap">

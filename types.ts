@@ -1,3 +1,4 @@
+
 export type ViewState = 'admin-grid' | 'admin-list' | 'add-charge' | 'add-member' | 'update-times' | 'member-view' | 'members' | 'finance' | 'settings';
 
 export interface Member {
@@ -14,6 +15,7 @@ export interface Member {
 export interface Transaction {
   id: string;
   user: string;
+  memberId?: string; // Optional: null for guests
   amount: number;
   type: 'Aliyah' | 'Maftir' | 'Petiha' | 'Kiddush' | 'Donation' | 'Membership' | 'Nader';
   detail?: string; // e.g. "Shlishi", "Parashat Noach"

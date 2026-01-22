@@ -1,43 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Transaction, Member } from '../types';
+import { UserPlus, ChevronDown } from 'lucide-react';
 
 interface Props {
   onComplete: (transaction: Transaction) => void;
   onCancel: () => void;
   existingMembers: Member[];
+  initialMemberId?: string;
 }
 
-export const AddChargeFlow: React.FC<Props> = ({ onComplete, onCancel, existingMembers }) => {
-    const [memberName, setMemberName] = useState('');
+const GUEST_VALUE = "_GUEST_";
+
+export const AddChargeFlow: React.FC<Props> = ({ onComplete, onCancel, existingMembers, initialMemberId }) => {
+    const [selectedMemberId, setSelectedMemberId] = useState(initialMemberId || '');
+    const [guestName, setGuestName] = useState('');
     const [amount, setAmount] = useState('50');
     const [type, setType] = useState('Aliyah');
     const [detail, setDetail] = useState('');
     const [error, setError] = useState<string | null>(null);
     
-    // Suggest first member if none selected or keep empty
-    React.useEffect(() => {
-        if (!memberName && existingMembers.length > 0) {
-            setMemberName(existingMembers[0].name);
+    const isGuestMode = selectedMemberId === GUEST_VALUE;
+
+    // Default to first member on load if no initialMemberId provided
+    useEffect(() => {
+        if (!selectedMemberId && existingMembers.length > 0) {
+            setSelectedMemberId(existingMembers[0].id);
         }
-    }, [existingMembers]);
+    }, [existingMembers, selectedMemberId]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Validation: Check if member exists
-        const memberExists = existingMembers.some(
-            m => m.name.trim() === memberName.trim()
-        );
+        let finalName = '';
+        let finalMemberId: string | undefined = undefined;
 
-        if (!memberExists) {
-            setError(`שגיאה: החבר '${memberName}' לא נמצא במערכת`);
-            setTimeout(() => setError(null), 5000);
-            return;
+        if (isGuestMode) {
+            if (!guestName.trim()) {
+                setError("נא להזין שם אורח");
+                return;
+            }
+            finalName = guestName.trim() + " (אורח)";
+        } else {
+            const member = existingMembers.find(m => m.id === selectedMemberId);
+            if (!member) {
+                setError("נא לבחור מתפלל מהרשימה");
+                return;
+            }
+            finalName = member.name;
+            finalMemberId = member.id;
         }
 
         const newTransaction: Transaction = {
             id: Date.now().toString(),
-            user: memberName,
+            user: finalName,
+            memberId: finalMemberId,
             amount: parseInt(amount) || 0,
             type: type as any,
             detail: detail || undefined,
@@ -52,31 +68,61 @@ export const AddChargeFlow: React.FC<Props> = ({ onComplete, onCancel, existingM
     const labelClasses = "block text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5";
 
   return (
-    <div className="flex flex-col h-full bg-paper-bg p-6 relative">
+    <div className="flex flex-col h-full bg-paper-bg p-6 relative overflow-hidden">
         <div className="mb-8">
              <h2 className="text-2xl font-bold text-primary">חיוב מתפלל</h2>
-             <p className="text-sm text-slate-500 mt-1">הזן את פרטי החיוב או הנדר</p>
+             <p className="text-sm text-slate-500 mt-1">הזן את פרטי החיוב עבור חבר או אורח</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 flex-1">
+        <form onSubmit={handleSubmit} className="space-y-6 flex-1 flex flex-col">
             
-            {/* Member Name Field */}
-            <div>
-                <label className={labelClasses}>שם המתפלל</label>
-                <div className="relative">
-                     <select 
-                        value={memberName}
-                        onChange={(e) => setMemberName(e.target.value)}
-                        className={`${inputClasses} appearance-none cursor-pointer`}
-                    >
-                        {existingMembers.map(m => (
-                            <option key={m.id} value={m.name}>{m.name}</option>
-                        ))}
-                    </select>
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
-                        ▼
+            {/* Member Selection Section */}
+            <div className="space-y-4">
+                <div>
+                    <label className={labelClasses}>בחר מתפלל</label>
+                    <div className="relative">
+                        <select 
+                            value={selectedMemberId}
+                            onChange={(e) => {
+                                setSelectedMemberId(e.target.value);
+                                if (e.target.value !== GUEST_VALUE) setGuestName('');
+                            }}
+                            className={`${inputClasses} appearance-none cursor-pointer pr-4 pl-10`}
+                        >
+                            <optgroup label="אפשרויות נוספות">
+                                <option value={GUEST_VALUE}>➕ אורח חדש (לא ברשימה)</option>
+                            </optgroup>
+                            <optgroup label="חברי בית הכנסת">
+                                {existingMembers.map(m => (
+                                    <option key={m.id} value={m.id}>{m.name}</option>
+                                ))}
+                            </optgroup>
+                        </select>
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                            <ChevronDown size={18} />
+                        </div>
                     </div>
                 </div>
+
+                {/* Guest Name Input - Animated visibility */}
+                {isGuestMode && (
+                    <div className="animate-in slide-in-from-top-4 fade-in duration-300">
+                        <label className={`${labelClasses} text-amber-600`}>שם האורח</label>
+                        <div className="relative">
+                            <input 
+                                type="text" 
+                                value={guestName}
+                                onChange={(e) => setGuestName(e.target.value)}
+                                className={`${inputClasses} border-amber-200 bg-amber-50/30 focus:border-amber-500 pr-10`}
+                                placeholder="לדוגמה: משה כהן (לונדון)"
+                                autoFocus
+                            />
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-amber-500">
+                                <UserPlus size={18} />
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Category Field */}
@@ -86,7 +132,7 @@ export const AddChargeFlow: React.FC<Props> = ({ onComplete, onCancel, existingM
                      <select 
                         value={type}
                         onChange={(e) => setType(e.target.value)}
-                        className={`${inputClasses} appearance-none cursor-pointer`}
+                        className={`${inputClasses} appearance-none cursor-pointer pr-4 pl-10`}
                     >
                         <option value="Aliyah">עלייה לתורה</option>
                         <option value="Maftir">מפטיר</option>
@@ -96,8 +142,8 @@ export const AddChargeFlow: React.FC<Props> = ({ onComplete, onCancel, existingM
                         <option value="Donation">תרומה</option>
                         <option value="Membership">דמי חבר</option>
                     </select>
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
-                        ▼
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                        <ChevronDown size={18} />
                     </div>
                 </div>
             </div>
